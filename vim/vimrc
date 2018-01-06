@@ -15,7 +15,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'vim-airline'
 Plugin 'wikitopian/hardmode'
 Plugin 'lambdatoast/elm.vim'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
