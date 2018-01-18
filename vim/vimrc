@@ -231,3 +231,30 @@ map <up> <nop>
 map <down> <nop>
 map <left> <nop>
 map <right> <nop>
+
+
+" Path to directory in which to save vim sessions
+let session_path="~/.vim/sessions/"
+
+" Save vim session with given name
+function! s:MakeSession(sessionStr)
+    let sessionName=a:sessionStr
+    :set sessionoptions=buffers
+    exec "mksession " . g:session_path . sessionName . ".vim"
+endf
+
+command! -nargs=1 MakeSession call s:MakeSession(<f-args>)
+
+" Load vim session with given name
+function! s:LoadSession(sessionStr)
+    let sessionName=a:sessionStr
+    exec "source " . g:session_path . sessionName . ".vim"
+endf
+
+command! -nargs=1 Load call s:LoadSession(<f-args>)
+
+" Automatically save the current session whenever vim is closed
+autocmd VimLeave * exec "mksession!" g:session_path . "shutdown_session.vim"
+
+" <F7> restores that 'shutdown session'
+noremap <F7> :exe ":source " . g:session_path . "shutdown_session.vim"<CR>
