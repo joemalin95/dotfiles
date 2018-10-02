@@ -114,3 +114,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+PATH=$PATH:~/.local/bin
+PATH=$PATH:~/bin
+export PATH

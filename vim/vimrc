@@ -15,7 +15,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'vim-airline'
 Plugin 'wikitopian/hardmode'
 Plugin 'lambdatoast/elm.vim'
-" Plugin 'scrooloose/syntastic'
+Plugin 'neovimhaskell/haskell-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -258,3 +258,65 @@ autocmd VimLeave * exec "mksession!" g:session_path . "shutdown_session.vim"
 
 " <F7> restores that 'shutdown session'
 noremap <F7> :exe ":source " . g:session_path . "shutdown_session.vim"<CR>
+
+" toggle spellcheck
+:map <Leader>s :setlocal spell! spelllang=en_us<CR>
+
+" Fixes Template Haskell highlighting
+let g:haskell_disable_TH = 1
+
+
+""""" Stylish Haskell
+
+
+autocmd BufWritePost *.hs call HaskellFormat()
+
+" Vim command to format Elm files with elm-format
+function! HaskellFormat() abort
+    " check for elm-format
+    if CheckBin('stylish-haskell', 'https://github.com/jaspervdj/stylish-haskell') ==# ''
+        return
+    endif
+
+    " save cursor position, folds and many other things
+    let l:curw = {}
+    try
+      mkview!
+    catch
+      let l:curw = winsaveview()
+    endtry
+
+    " save our undo file to be restored after we are done.
+    let l:tmpundofile = tempname()
+    exe 'wundo! ' . l:tmpundofile
+
+    " write current unsaved buffer to a temporary file
+    let l:tmpname = tempname() . '.hs'
+    call writefile(getline(1, '$'), l:tmpname)
+
+    " call elm-format on the temporary file
+    let l:out = system('stylish-haskell -i ' . l:tmpname)
+
+    " if there is no error
+    if v:shell_error == 0
+        try | silent undojoin | catch | endtry
+
+        " replace current file with temp file, then reload buffer
+        let l:old_fileformat = &fileformat
+        call rename(l:tmpname, expand('%'))
+        silent edit!
+        let &fileformat = l:old_fileformat
+        let &syntax = &syntax
+    endif
+
+    " save our undo history
+    silent! exe 'rundo ' . l:tmpundofile
+    call delete(l:tmpundofile)
+
+    " restore our cursor/windows positions, folds, etc..
+    if empty(l:curw)
+      silent! loadview
+    else
+      call winrestview(l:curw)
+    endif
+endf
