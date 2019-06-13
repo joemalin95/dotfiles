@@ -16,6 +16,7 @@ Plugin 'vim-airline'
 Plugin 'wikitopian/hardmode'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'neovimhaskell/haskell-vim'
+Plugin 'LnL7/vim-nix'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
