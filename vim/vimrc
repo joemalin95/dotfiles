@@ -17,6 +17,11 @@ Plugin 'wikitopian/hardmode'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'neovimhaskell/haskell-vim'
 Plugin 'LnL7/vim-nix'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'peitalin/vim-jsx-typescript'
+Plugin 'prettier/vim-prettier'
+Plugin 'ruby-formatter/rufo-vim'
+Plugin 'lifepillar/vim-solarized8'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -321,3 +326,8 @@ function! HaskellFormat() abort
       call winrestview(l:curw)
     endif
 endf
+
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+
+let g:rufo_auto_formatting = 1
